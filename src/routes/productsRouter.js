@@ -81,11 +81,14 @@ productsRouter.post('/', async (req,res)=>{
 //actualizar datos
 productsRouter.put('/:pid',async (req,res)=>{
    const {pid} = req.params
+   const productupdate = req.body
+
    const PManager=new ProductsManager('./src/storage/products.json')
+   
    try {
-        
+        PManager.updateProductById(pid, productupdate)     
    } catch (error) {
-       
+       console.log(error)
    }
 
 })

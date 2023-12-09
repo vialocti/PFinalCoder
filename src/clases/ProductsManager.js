@@ -62,10 +62,26 @@ export class ProductsManager{
         
     }
 
+    //modificar producto
+    async updateProductById(productId, productUpdate){
+        const productos = await this.getProducts()
 
+
+
+        let productsupdated = productos.map(pro=>{
+            if(pro.id===+productId){
+                return {...pro,...productUpdate, id:+productId}
+            }
+           return pro
+        })
+
+        await fs.promises.writeFile(this.path,JSON.stringify(productsupdated))
+        return true
+    }
     //eliminar un registro
 
     async deleteProductoById(productId){
+        
         let productos =JSON.parse(await fs.promises.readFile(this.path,'utf-8'))
 
         let productosact= productos.filter(elemento => elemento.id !== +productId)
