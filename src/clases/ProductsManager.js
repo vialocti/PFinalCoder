@@ -1,17 +1,18 @@
 import fs from 'fs'
-import path from 'path'
+
 
 export class ProductsManager{
     
     constructor(path){
-        this.path
+        this.path=path
     }
 
-    static id=0 //numero de id de cada producto
+    //static id=0 //numero de id de cada producto
 
     //traer todos los productos que se encuentran almacenados en un archivo json 
     // y si no hay archivo array vacio []
     async getProducts (){
+        
         try {
             const datos = await fs.promises.readFile(this.path, 'utf-8') //leemos archivo que se encuentra en la carpeta del path
             return JSON.parse(datos) //convertimos en objeto js
@@ -37,23 +38,43 @@ export class ProductsManager{
 
 
     //adicionar un nuevo producto
-    async addProduct(new_product){
+    async addProduct(allproducts,new_p){
         
-        if(!new_product.name){
-            return
-        }
+      
+   
+        
         try{
-        let products = await fs.promises.readFile(this.path,'utf-8')
-        ProductManager.id++
-        new_product.id=ProductManager.id
-        products.push(new_product)
-        await fs.promises.writeFile(this.path,JSON.stringify(products))
+//        let products = await fs.promises.readFile(this.path,'utf-8')
+         
+        //ProductsManager.id++
+        //new_p.id=ProductsManager.id
+        new_p.status=true
+        
+        allproducts.push(new_p)
+        await fs.promises.writeFile(this.path,JSON.stringify(allproducts))
+        return true
+        
         }catch(error){
+            console.log(error)
             return error
         }
+
+        
     }
 
-    
-    
 
+    //eliminar un registro
+
+    async deleteProductoById(productId){
+        let productos =JSON.parse(await fs.promises.readFile(this.path,'utf-8'))
+
+        let productosact= productos.filter(elemento => elemento.id !== +productId)
+        await fs.promises.writeFile(this.path,JSON.stringify(productosact))
+
+
+    }
+
+  
 }
+
+
