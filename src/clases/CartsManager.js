@@ -1,4 +1,3 @@
-import { Console } from 'console'
 import fs from 'fs'
 export class CartsManager{
 
@@ -9,7 +8,9 @@ export class CartsManager{
     
 
 
+    
 
+    //buscar carritos
     async #getCarts(){
 
         try {
@@ -22,7 +23,7 @@ export class CartsManager{
         
     }
 
-
+    //traer productos  
     async getCartById(cartId){
         
         try {
@@ -32,11 +33,14 @@ export class CartsManager{
            return cart.products 
 
         } catch (error) {
-           console.log(error) 
-        }
+           console.log(error)
+           return false
+          }
 
     }
 
+
+    //crear un carrito
     async addCarts(){
         
         let idc= 0
@@ -60,11 +64,15 @@ export class CartsManager{
             await fs.promises.writeFile(this.path, JSON.stringify(carts),'utf-8') 
             return true   
         } catch (error) {
+            console.log(error)
             return false
         }
 
     }
 
+ 
+   //adicionar un producto al carrito
+ 
     async addProducttoCart(cartId,productId){
         
         
@@ -114,14 +122,14 @@ export class CartsManager{
                 await fs.promises.writeFile(this.path,JSON.stringify(carts))
                 return true
             }
-
+        
             
 
            
 
         } catch (error) {
             console.log(error)
-            return 'Ocurrio un error'
+            return false
         }
     }
     

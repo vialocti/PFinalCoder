@@ -14,6 +14,7 @@ cartsRouter.post('/', async (req,res)=>{
             res.send({status:'Ok'})
         }
     } catch (error) {
+        console.log(error)
         res.send(error)
     }
 
@@ -27,7 +28,10 @@ cartsRouter.get('/:cid', async(req,res)=>{
         
         const resu = await newCart.getCartById(cid)
         res.send({status:'Ok',payload:resu})
+   
     } catch (error) {
+        console.log(error)
+        res.send(error)
         
     }
 
@@ -42,7 +46,8 @@ cartsRouter.post('/:cid/product/:pid', async (req,res)=>{
             res.send({status:'ok'})
         }
     } catch (error) {
-        
+        console.log(error)
+
     }
 })
 

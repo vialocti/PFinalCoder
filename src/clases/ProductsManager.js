@@ -31,6 +31,7 @@ export class ProductsManager{
             let product = products.find(pr=>pr.id===parseInt(productID))
             return product
         } catch (error) {
+            console.log(error)
             return error            
         }
 
@@ -64,6 +65,9 @@ export class ProductsManager{
 
     //modificar producto
     async updateProductById(productId, productUpdate){
+     
+        try{
+
         const productos = await this.getProducts()
 
 
@@ -77,16 +81,28 @@ export class ProductsManager{
 
         await fs.promises.writeFile(this.path,JSON.stringify(productsupdated))
         return true
+        }catch(error){
+        return false
+        }
     }
+
+
     //eliminar un registro
 
     async deleteProductoById(productId){
         
-        let productos =JSON.parse(await fs.promises.readFile(this.path,'utf-8'))
+        try {
+            let productos =JSON.parse(await fs.promises.readFile(this.path,'utf-8'))
 
-        let productosact= productos.filter(elemento => elemento.id !== +productId)
-        await fs.promises.writeFile(this.path,JSON.stringify(productosact))
+            let productosact= productos.filter(elemento => elemento.id !== +productId)
+            await fs.promises.writeFile(this.path,JSON.stringify(productosact))
+            return true
 
+        } catch (error) {
+            return false
+        }
+        
+        
 
     }
 
