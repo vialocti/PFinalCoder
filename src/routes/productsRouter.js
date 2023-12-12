@@ -34,8 +34,11 @@ productsRouter.get('/:pid', async(req,res)=>{
     
     try {
         const product=await PManager.getProductById(pid)
-        return res.send({status:'Ok', payload:product})
-        
+        if(!product){
+            res.send({status:'Ok', message:'NO encontrado el Producto con ese id'})
+        }else{
+        return res.send(product)
+        }
     } catch (error) {
 
         return res.send({error:"se ha producido un error"})
@@ -67,10 +70,10 @@ productsRouter.post('/', async (req,res)=>{
             pid=1
         }
         new_p.id=pid
-        const resu = await PManager.addProduct(allproducts,new_p)
-        if(resu){
+            await PManager.addProduct(allproducts,new_p)
+        
             res.send({status:"Ok",desctiption:"alta producto"})
-        }
+        
     } catch (error) {
         console.log(error)
     }
@@ -86,8 +89,14 @@ productsRouter.put('/:pid',async (req,res)=>{
    const PManager=new ProductsManager('./src/storage/products.json')
    
    try {
-        PManager.updateProductById(pid, productupdate)     
-   } catch (error) {
+        let resu= await PManager.updateProductById(pid, productupdate)    
+        
+        if(resu){res.send({status:'Ok', messsage:'Actualizado'})
+    }else{
+  
+        res.send({status:'Ok', messsage:'No encontrado'}) 
+    }
+    } catch (error) {
        console.log(error)
    }
 
@@ -98,7 +107,12 @@ productsRouter.delete('/:pid', async(req,res)=>{
     const {pid} = req.params
     const PManager=new ProductsManager('./src/storage/products.json')
     try {
-        await PManager.deleteProductoById(pid)
+        const resu = await PManager.deleteProductoById(pid)
+        if(resu){
+            res.send({status:'Ok', messsage:`Elemento Id:${pid} Eliminado`})
+        }else{
+            res.send({status:'Ok', messsage:`Elemento ID:${pid} No encontrado`})
+        }
 
     } catch (error) {
         console.log(error)

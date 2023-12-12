@@ -27,9 +27,10 @@ export class ProductsManager{
         
         if(!productID){return console.log('Numero no valido')}
         try {
-            let products = await fs.promises.readFile(this.path,'utf-8')
+            const products = await this.getProducts()
             let product = products.find(pr=>pr.id===parseInt(productID))
-            return product
+            if(!product){return false}
+            return ({status:'Ok', product:product})
         } catch (error) {
             console.log(error)
             return error            
@@ -42,14 +43,15 @@ export class ProductsManager{
     async addProduct(allproducts,new_p){
         
       
-   
+        
         
         try{
-//        let products = await fs.promises.readFile(this.path,'utf-8')
+        //let products = await this.getProducts()
          
         //ProductsManager.id++
         //new_p.id=ProductsManager.id
         new_p.status=true
+        //console.log(new_p)
         
         allproducts.push(new_p)
         await fs.promises.writeFile(this.path,JSON.stringify(allproducts))
@@ -66,22 +68,30 @@ export class ProductsManager{
     //modificar producto
     async updateProductById(productId, productUpdate){
      
+        //console.log(productId, productUpdate)
+        let productoUp=false
         try{
 
         const productos = await this.getProducts()
-
+        
 
 
         let productsupdated = productos.map(pro=>{
             if(pro.id===+productId){
+                productoUp=true
                 return {...pro,...productUpdate, id:+productId}
             }
            return pro
         })
-
-        await fs.promises.writeFile(this.path,JSON.stringify(productsupdated))
-        return true
+        
+        if(productoUp){
+          await fs.promises.writeFile(this.path,JSON.stringify(productsupdated))
+          return true
+        }else{return false}
+        
+         
         }catch(error){
+            console.log(error)
         return false
         }
     }
@@ -91,10 +101,17 @@ export class ProductsManager{
 
     async deleteProductoById(productId){
         
+        
+
         try {
+        
+            let existeProducto = await this.getProductById(productId)
+            if(!existeProducto){return false}
+           
             let productos =JSON.parse(await fs.promises.readFile(this.path,'utf-8'))
 
             let productosact= productos.filter(elemento => elemento.id !== +productId)
+            
             await fs.promises.writeFile(this.path,JSON.stringify(productosact))
             return true
 

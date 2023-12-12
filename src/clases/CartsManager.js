@@ -29,7 +29,7 @@ export class CartsManager{
         try {
            let carts =await this.#getCarts()
            let cart = carts.find(c => c.id === +cartId)
-           //console.log(cart)
+           if(!cart){return false}
            return cart.products 
 
         } catch (error) {
@@ -78,16 +78,10 @@ export class CartsManager{
         
         try {
            
-            let carts = await this.#getCarts()
-            
-            //console.log(cartId,productId)      
-            
-            let cart =carts.find(c => c.id === +cartId)
-          
-            //if(!cart){return 'CartId No encontrado'}
 
-            //console.log(cart)
-            
+            let carts = await this.#getCarts()
+            let cart =carts.find(c => c.id === +cartId)
+                 
            
             let productsc = cart.products
             let prod= productsc.find(p=>p.id === +productId)
