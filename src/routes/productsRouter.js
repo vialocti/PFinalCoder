@@ -12,7 +12,9 @@ productsRouter.get('/',async (req,res)=>{
     const PManager = new ProductsManager('./src/storage/products.json')
    try {
     if(!limit){
-        return res.send(await PManager.getProducts())
+        const productos= await PManager.getProducts()
+        
+        return res.render('home',{productos, title:'Productos'})
     }
     let arraylimit=[]
     
@@ -119,6 +121,9 @@ productsRouter.delete('/:pid', async(req,res)=>{
     }
 
 })
+
+//////
+
 
 
 
