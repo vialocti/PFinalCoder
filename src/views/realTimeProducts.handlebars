@@ -1,0 +1,78 @@
+
+<div class="container-fluid">
+    
+    <div class="row">
+    <div class="col">
+
+  
+    <form action="/api/products" method="post" enctype="application/x-www-form-urlencoded">
+        
+        <h3>Carga de Producto</h3>
+        <div class="form-control">
+        <label for="title">Titulo</label>
+        <input
+            id="title"
+            name="title"
+            type="text"
+         />
+         </div>
+          <div class="form-control">
+         <label for="description">Descripcion</label>
+        <input 
+            id="description"
+            name="description"
+            type="text"
+        />
+        </div>
+        <div class="form-control">
+        <label for="code">Codigo</label>
+        <input 
+            name="code"
+            type="text"
+        />
+        </div>
+        <div class="form-control">
+        <label for="price">Precio</label>
+        <input
+            name="price"
+            type="number" 
+        />
+        </div>
+        <div class="form-control">
+        <label for="stock">Stock</label>
+        <input
+            name="stock"
+            type="number" 
+        />
+        </div>
+        <div class="form-control">
+        <label for="category">Categoria</label> 
+        <input
+            name="category"
+            type="text" 
+        />
+        </div>
+        <div class="form-control">
+        <label for="thumbnails">Imagenes producto</label>
+        <input
+            name="thumbnails"
+            type="text" 
+        />
+        </div>
+        <div class="form-control">
+        <button id="btn">Guardar</button>
+        </div>  
+    </form>
+    </div>
+    
+    
+   
+    <div class="col">
+        <h3>Listado de Productos onLine</h3>
+        <p id="output"></p>
+    </div>
+</div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/realtp.js"></script>

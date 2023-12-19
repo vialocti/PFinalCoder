@@ -4,16 +4,20 @@ import handlebars from 'express-handlebars'
 
 import cartsRouter from './routes/cartsRouter.js'
 import productsRouter from './routes/productsRouter.js'
+import { ProductsManager } from './clases/ProductsManager.js'
+
 
 
 //
-const PORT=8080
+const PORT=8000
+
 const app=express()
 
 //
+app.use(express.static('public'))
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
-app.use(express.static('public'))
+
 
 //motor plantilla
 
@@ -31,7 +35,26 @@ app.get('/', (req,res)=>{
 
 app.use('/api/carts', cartsRouter)
 app.use('/api/products', productsRouter)
+
 //
-app.listen(PORT, ()=>{
+const httpServer=app.listen(PORT, ()=>{
     console.log(`Server is listend in port ${PORT}`)
+})
+let products=[]
+const io = new Server(httpServer)
+
+
+io.on('connection', socket=>{
+   // console.log('connection new')
+
+
+    
+    socket.on('msg', async data=>{
+    
+       const PM=new ProductsManager('./src/storage/products.json')
+       products=await PM.getProducts()
+       io.emit('messages',products)
+    })
+   
+
 })

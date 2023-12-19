@@ -1,9 +1,22 @@
 import {Router} from 'express'
+
 import {ProductsManager} from '../clases/ProductsManager.js'
+
+
+
+
 
 const productsRouter=Router()
 
+
 //traer todos los productos o limitado a u numero
+
+
+
+productsRouter.get('/realtimeproducts', (req, res)=>{
+    res.render('realTimeProducts',{title:'CargaProducto'})
+})
+//
 
 productsRouter.get('/',async (req,res)=>{
 
@@ -49,10 +62,16 @@ productsRouter.get('/:pid', async(req,res)=>{
 })
 
 
+
+
 //grabar un producto en el archivo
 productsRouter.post('/', async (req,res)=>{
+   
 
     const new_p = req.body
+    //console.log(new_p)
+    
+    
     const PManager=new ProductsManager('./src/storage/products.json')
 
     if(!new_p.title || !new_p.description || !new_p.code || !new_p.price || !new_p.stock || !new_p.category || !new_p.thumbnails){
@@ -73,9 +92,10 @@ productsRouter.post('/', async (req,res)=>{
         }
         new_p.id=pid
             await PManager.addProduct(allproducts,new_p)
-        
-            res.send({status:"Ok",desctiption:"alta producto"})
-        
+             
+          //res.send({status:"Ok",desctiption:"alta producto"})
+           
+           res.redirect('/api/products/realtimeproducts')
     } catch (error) {
         console.log(error)
     }
@@ -123,6 +143,7 @@ productsRouter.delete('/:pid', async(req,res)=>{
 })
 
 //////
+
 
 
 
