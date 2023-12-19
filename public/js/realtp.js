@@ -7,7 +7,7 @@ socket.emit('msg','nuevo cliente' )
 socket.on('messages', datos=>{
     let productos = '';
     datos.forEach(producto => {
-        productos+=`id:${producto.id} Producto:${producto.title} Precio:${producto.price} Cantidad:${producto.stock} <br />`
+        productos+=`ID:<strong>${producto.id}</strong> -- Producto:<strong>${producto.title}</strong> -- Precio:<strong>${producto.price}</strong> -- Stock:<strong>${producto.stock}</strong><br/>`
     });
     outputData.innerHTML = productos;
 })
