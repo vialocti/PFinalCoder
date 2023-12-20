@@ -2,77 +2,83 @@
 <div class="container-fluid">
     
     <div class="row">
-    <div class="col">
+   
+   
+    <div class="col-md-6 p-4">
+
 
   
-    <form action="/api/products" method="post" enctype="application/x-www-form-urlencoded">
+        <form action="/api/products" method="post" enctype="application/x-www-form-urlencoded">
         
-        <h3>Carga de Producto</h3>
-        <div class="form-control">
-        <label for="title">Titulo</label>
-        <input
-            id="title"
-            name="title"
-            type="text"
-         />
-         </div>
-          <div class="form-control">
-         <label for="description">Descripcion</label>
-        <input 
-            id="description"
-            name="description"
-            type="text"
-        />
-        </div>
-        <div class="form-control">
-        <label for="code">Codigo</label>
-        <input 
-            name="code"
-            type="text"
-        />
-        </div>
-        <div class="form-control">
-        <label for="price">Precio</label>
-        <input
-            name="price"
-            type="number" 
-        />
-        </div>
-        <div class="form-control">
-        <label for="stock">Stock</label>
-        <input
-            name="stock"
-            type="number" 
-        />
-        </div>
-        <div class="form-control">
-        <label for="category">Categoria</label> 
-        <input
-            name="category"
-            type="text" 
-        />
-        </div>
-        <div class="form-control">
-        <label for="thumbnails">Imagenes producto</label>
-        <input
-            name="thumbnails"
-            type="text" 
-        />
-        </div>
-        <div class="form-control">
-        <button id="btn">Guardar</button>
-        </div>  
-    </form>
+            <h3>Carga de Producto</h3>
+        
+            <label for="title">Titulo</label>
+            <input class="form-control"
+                id="title"
+                name="title"
+                type="text"
+            />
+            
+         
+            <label for="description">Descripcion</label>
+            <input class="form-control"
+                id="description"
+                name="description"
+                type="text"
+            />
+        
+        
+            <label for="code">Codigo</label>
+            <input class="form-control"
+                name="code"
+                type="text"
+            />
+            
+        
+            <label for="price">Precio</label>
+            <input class="form-control"
+                name="price"
+                type="number" 
+            />
+       
+        
+            <label for="stock">Stock</label>
+            <input class="form-control"
+                name="stock"
+                type="number" 
+            />
+            
+       
+            <label for="category">Categoria</label> 
+            <input  class="form-control"
+                name="category"
+                type="text" 
+            />
+        
+     
+            <label for="thumbnails">Imagenes producto</label>
+            <input class="form-control"
+                name="thumbnails"
+                type="text" 
+            />
+        
+      
+            <button class="btn btn-primary mt-2" id="btn">Ingresar Nuevo Producto</button>
+        
+        </form>
+    
     </div>
     
     
    
-    <div class="col">
+    <div class="col-md-6 p-4">
           <h3>Eliminar un Producto</h3>
         <form>
-            <input type="number" id="id_borrar" value="1" />
-            <button id="eliminar">Eliminar Producto</button>
+            <label for="id">Ingrese Id Producto</label>
+            <input  class="form-control" type="number" id="id_borrar" value="1" />
+            <button  class="btn btn-danger mt-3" id="eliminar">Eliminar Producto</button>
         </form>
+        <hr/>
         <h3>Listado de Productos onLine</h3>
        
 

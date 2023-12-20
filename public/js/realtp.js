@@ -6,11 +6,11 @@ const btn_delete= document.getElementById("eliminar")
 socket.emit('msg','nuevo cliente' )
 
 socket.on('messages', datos=>{
-    let productos = '';
+    let productos = '<table class="table"><thead><tr><th>ID</th><th>Producto</th><th>Precio</th><th>Stock</th></tr></thead><tbody>';
     datos.forEach(producto => {
-        productos+=`ID:<strong>${producto.id}</strong> -- Producto:<strong>${producto.title}</strong> -- Precio:<strong>${producto.price}</strong> -- Stock:<strong>${producto.stock}</strong> <br/>`
+        productos+=`<tr><td>${producto.id}</td><td>${producto.title}</td><td>${producto.price}</td><td>${producto.stock}</td> <tr/>`
     });
-    outputData.innerHTML = productos;
+    outputData.innerHTML = productos+'</tbody></table>';
 })
 
 
