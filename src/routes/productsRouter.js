@@ -115,7 +115,7 @@ productsRouter.put('/:pid',async (req,res)=>{
         
         if(resu){res.send({status:'Ok', messsage:'Actualizado'})
     }else{
-  
+       
         res.send({status:'Ok', messsage:'No encontrado'}) 
     }
     } catch (error) {
@@ -127,17 +127,22 @@ productsRouter.put('/:pid',async (req,res)=>{
 //borrar un producto
 productsRouter.delete('/:pid', async(req,res)=>{
     const {pid} = req.params
+    //console.log(pid)
     const PManager=new ProductsManager('./src/storage/products.json')
     try {
         const resu = await PManager.deleteProductoById(pid)
         if(resu){
-            res.send({status:'Ok', messsage:`Elemento Id:${pid} Eliminado`})
+            //res.send({status:'Ok', messsage:`Elemento Id:${pid} Eliminado`})
+            //console.log('pase')
+            res.redirect('/api/products/realtimeproducts')
         }else{
             res.send({status:'Ok', messsage:`Elemento ID:${pid} No encontrado`})
         }
-
+       
     } catch (error) {
         console.log(error)
+    }finally{
+        // res.redirect('/api/products/realtimeproducts')
     }
 
 })

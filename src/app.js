@@ -55,6 +55,13 @@ io.on('connection', socket=>{
        products=await PM.getProducts()
        io.emit('messages',products)
     })
+
+    socket.on('msgdel', async data=>{
+        //console.log('se elimino un producto')
+        const PM=new ProductsManager('./src/storage/products.json')
+        products=await PM.getProducts()
+        io.emit('messages',products)
+     })
    
 
 })
