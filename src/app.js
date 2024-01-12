@@ -2,10 +2,14 @@ import express from 'express'
 import {Server} from 'socket.io'
 import handlebars from 'express-handlebars'
 
-import cartsRouter from './routes/cartsRouter.js'
 import productsRouter from './routes/productsRouter.js'
-import { ProductsManager } from './clases/ProductsManager.js'
+import cartsRouter from './routes/cartsRouter.js'
 
+
+
+import mongoose  from 'mongoose'
+import viwesRoutes from './routes/viewsRouter.js'
+import messagesRoutes from './routes/messages.routes.js'
 
 
 //
@@ -28,40 +32,36 @@ app.set('view engine', 'handlebars')
 
 
 //router prueba
-app.get('/', (req,res)=>{
-    res.render('index')
-})
+
 
 
 app.use('/api/carts', cartsRouter)
 app.use('/api/products', productsRouter)
-
+app.use('/api/messages', messagesRoutes)
+app.use('/',viwesRoutes)
 //
+
+//connect a db mongoAtlas
 const httpServer=app.listen(PORT, ()=>{
     console.log(`Server is listend in port ${PORT}`)
 })
-let products=[]
+
+mongoose.connect('mongodb+srv://api-directo:FTtayuVRLQw3y70i@cluster0.7tefz.mongodb.net/ecommerce?retryWrites=true&w=majority')
+.then(()=>{console.log('Connectado')})
+.catch(error=>{console.log(error)})
+
 const io = new Server(httpServer)
 
+io.on('connect', socket=>{
+    console.log('nueva coneccion')
 
-io.on('connection', socket=>{
-   // console.log('connection new')
-
-
-    
-    socket.on('msg', async data=>{
-    
-       const PM=new ProductsManager('./src/storage/products.json')
-       products=await PM.getProducts()
-       io.emit('messages',products)
+    socket.on('message',data=>{
+        
+        
+        io.emit('respuesta',{mensage:'enviado correctamente'})
+        
     })
 
-    socket.on('msgdel', async data=>{
-        //console.log('se elimino un producto')
-        const PM=new ProductsManager('./src/storage/products.json')
-        products=await PM.getProducts()
-        io.emit('messages',products)
-     })
-   
-
 })
+
+

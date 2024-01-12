@@ -1,13 +1,27 @@
 import {Router} from 'express'
-import {CartsManager}  from '../clases/CartsManager.js'
-import { ProductsManager } from '../clases/ProductsManager.js'
+import {CartsManagerMDB}  from '../dao/clasesmg/CartsManagerMDB.js'
+import { ProductsManagerMDB } from '../dao/clasesmg/ProductsManagerMDB.js'
 
 const cartsRouter=Router()
 
 
+cartsRouter.get('/',async (req,res)=>{
+    const newCart = new CartsManagerMDB()
+    try {
+        const carts = await newCart.getCarts()
+        
+            res.send(carts)
+        
+    } catch (error) {
+        console.log(error)
+        res.send(error)
+    }
+})
+
+
 cartsRouter.post('/', async (req,res)=>{
     
-    const newCart = new CartsManager('./src/storage/carts.json')
+    const newCart = new CartsManagerMDB()
     try {
         const resu = await newCart.addCarts()
         if (resu){
@@ -22,11 +36,12 @@ cartsRouter.post('/', async (req,res)=>{
 
 cartsRouter.get('/:cid', async(req,res)=>{
     const {cid}= req.params
-    const newCart = new CartsManager('./src/storage/carts.json')
+    const newCart = new CartsManagerMDB()
     
     try {
         
         const resu = await newCart.getCartById(cid)
+        console.log(resu)
         if(!resu){return res.send({aviso:'warning', message:'No existe ese carrito'})}
         
         res.send({status:'Ok',productos:resu})
@@ -39,16 +54,38 @@ cartsRouter.get('/:cid', async(req,res)=>{
 
 })
 
-cartsRouter.post('/:cid/product/:pid', async (req,res)=>{
+
+cartsRouter.delete('/:cid', async(req,res)=>{
+    const {cid}= req.params
+    const newCart = new CartsManagerMDB()
+    
+    try {
+        
+        const resu = await newCart.deleteCartById(cid)
+        //console.log(resu)
+        if(!resu){return res.send({aviso:'warning', message:'No existe ese carrito'})}
+        
+        res.send({status:'Ok',message:'carrito eliminado'})
+   
+    } catch (error) {
+        console.log(error)
+        res.send(error)
+        
+    }
+
+})
+
+
+cartsRouter.put('/:cid/product/:pid', async (req,res)=>{
     const {cid, pid}=req.params
 
-    const newProd = new ProductsManager('./src/storage/products.json')
-    const newCart = new CartsManager('./src/storage/carts.json')
+    const newProd = new ProductsManagerMDB()
+    const newCart = new CartsManagerMDB()
     try {
         const producto= await newProd.getProductById(pid)
        
         if(!producto){ return res.send({aviso:'warning', message:'Producto no existe'})}
-        const resu = await newCart.addProducttoCart(cid,pid)
+            const resu = await newCart.addProducttoCart(cid,pid)
         if(resu){
             res.send({status:'ok',message:'Se Agrgego un nuevo Producto'})
         }

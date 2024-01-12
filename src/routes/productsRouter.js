@@ -1,6 +1,7 @@
 import {Router} from 'express'
+import { uploader } from '../utils/multer.js'
 
-import {ProductsManager} from '../clases/ProductsManager.js'
+import {ProductsManagerMDB} from '../dao/clasesmg/ProductsManagerMDB.js'
 
 
 
@@ -12,43 +13,46 @@ const productsRouter=Router()
 //traer todos los productos o limitado a u numero
 
 
-
-productsRouter.get('/realtimeproducts', (req, res)=>{
-    res.render('realTimeProducts',{title:'CargaProducto'})
-})
-//
+// traer todos los productos o una cantidad limitada
 
 productsRouter.get('/',async (req,res)=>{
 
     let limit = req.query.limit
+    let productos=[]
 
-    const PManager = new ProductsManager('./src/storage/products.json')
+    const PManager = new ProductsManagerMDB()
    try {
     if(!limit){
-        const productos= await PManager.getProducts()
+        productos= await PManager.getProducts()
         
-        return res.render('home',{productos, title:'Productos'})
+        return  res.render('home',{productos, title:'Productos'})
+        //return res.send(productos)
     }
-    let arraylimit=[]
+    
     
     const allproducts = await PManager.getProducts()
     
-    arraylimit=allproducts.slice(0,limit)
+    productos=allproducts.slice(0,limit)
+    //console.log(arraylimit)
+     res.render('home',{productos, title:'Productos'})
+    //res.send(productos)
     
-    res.send(arraylimit)
    } catch (error) {
     return res.send({error:"se ha producido un error"})
    }
     
 
 })
+
 //traer un producto por su id
+
 productsRouter.get('/:pid', async(req,res)=>{
     const {pid} = req.params
-    const PManager = new ProductsManager('./src/storage/products.json')
+    const PManager = new ProductsManagerMDB()
     
     try {
         const product=await PManager.getProductById(pid)
+        
         if(!product){
             res.send({status:'Ok', message:'NO encontrado el Producto con ese id'})
         }else{
@@ -65,37 +69,30 @@ productsRouter.get('/:pid', async(req,res)=>{
 
 
 //grabar un producto en el archivo
-productsRouter.post('/', async (req,res)=>{
+productsRouter.post('/', uploader.single('file'), async (req,res)=>{
    
 
     const new_p = req.body
-    //console.log(new_p)
+    const path = req.file.path.split('public').join('')
+    //console.log(req.file.path)
     
     
-    const PManager=new ProductsManager('./src/storage/products.json')
+    const PManager=new ProductsManagerMDB()
 
-    if(!new_p.title || !new_p.description || !new_p.code || !new_p.price || !new_p.stock || !new_p.category || !new_p.thumbnails){
+    if(!new_p.title || !new_p.description || !new_p.code || !new_p.price || !new_p.stock || !new_p.category){
         return res.send({status:"error",descripcion:"datos incompletos"})
     }
         
  
     try {
-         const allproducts =  await PManager.getProducts()
-         let pid= 0
-        
-        
-        if(allproducts.length > 0){
-            let ids= allproducts.map(c=>c.id)
-            pid=Math.max(...ids) + 1
-        }else{
-            pid=1
-        }
-        new_p.id=pid
-            await PManager.addProduct(allproducts,new_p)
-             
-          //res.send({status:"Ok",desctiption:"alta producto"})
+         
+            const result = await PManager.addProduct({...new_p,thumbnails:path})
+             if(result.index===0){
+                return res.send({status:"Error",desctiption:"datos producto mal"})
+             }
+             res.send({status:"Ok",desctiption:"alta producto"})
            
-           res.redirect('/api/products/realtimeproducts')
+              //res.redirect('/api/products/realtimeproducts')
     } catch (error) {
         console.log(error)
     }
@@ -108,10 +105,10 @@ productsRouter.put('/:pid',async (req,res)=>{
    const {pid} = req.params
    const productupdate = req.body
 
-   const PManager=new ProductsManager('./src/storage/products.json')
+   const PManager=new ProductsManagerMDB()
    
    try {
-        let resu= await PManager.updateProductById(pid, productupdate)    
+        const resu =PManager.updateProductById(pid,productupdate)
         
         if(resu){res.send({status:'Ok', messsage:'Actualizado'})
     }else{
@@ -127,14 +124,17 @@ productsRouter.put('/:pid',async (req,res)=>{
 //borrar un producto
 productsRouter.delete('/:pid', async(req,res)=>{
     const {pid} = req.params
-    //console.log(pid)
-    const PManager=new ProductsManager('./src/storage/products.json')
+
+    const PManager=new ProductsManagerMDB()
+   
+    
     try {
         const resu = await PManager.deleteProductoById(pid)
+        console.log(resu)
         if(resu){
-            //res.send({status:'Ok', messsage:`Elemento Id:${pid} Eliminado`})
-            //console.log('pase')
-            res.redirect('/api/products/realtimeproducts')
+            res.send({status:'Ok', messsage:`Elemento Id:${pid} Eliminado`})
+            
+            
         }else{
             res.send({status:'Ok', messsage:`Elemento ID:${pid} No encontrado`})
         }

@@ -1,0 +1,75 @@
+<div class="container-fluid">
+    
+    <div class="row">
+   
+   
+    <div class="col-md-6 p-4">
+
+
+  
+        <form action="/api/products" method="post" enctype="multipart/form-data">
+        
+            <h3>Carga de Producto</h3>
+        
+            <label for="title">Titulo</label>
+            <input class="form-control"
+                id="title"
+                name="title"
+                type="text"
+            />
+            
+         
+            <label for="description">Descripcion</label>
+            <input class="form-control"
+                id="description"
+                name="description"
+                type="text"
+            />
+        
+        
+            <label for="code">Codigo</label>
+            <input class="form-control"
+                name="code"
+                type="text"
+            />
+            
+        
+            <label for="price">Precio</label>
+            <input class="form-control"
+                name="price"
+                type="number" 
+            />
+       
+        
+            <label for="stock">Stock</label>
+            <input class="form-control"
+                name="stock"
+                type="number" 
+            />
+            
+       
+            <label for="category">Categoria</label> 
+            <input  class="form-control"
+                name="category"
+                type="text" 
+            />
+        
+     
+            <label for="thumbnails">Imagenes producto</label>
+            <input class="form-control"
+                name="file"
+                type="file" 
+            />
+        
+      
+            <button  type="submit"  class="btn btn-primary mt-2" id="btn">Ingresar Nuevo Producto</button>
+        
+        </form>
+    
+    </div>
+    <div class="col-md-6 p-4">
+
+        
+    </div>
+    </div>
+    </div>
